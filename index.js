@@ -38,11 +38,6 @@ Qお試し乗船できる？→できる。3〜5日ほど見学できる。
 Q資格は必要？→自動車免許があると便利。
 Q雰囲気は？→船員が優しいと評判。大声だが笑い声の絶えない職場。`;
 
-function verifySignature(body, signature) {
-  const hash = crypto.createHmac('sha256', LINE_SECRET).update(body).digest('base64');
-  return hash === signature;
-}
-
 async function replyToLine(replyToken, text) {
   await fetch('https://api.line.me/v2/bot/message/reply', {
     method: 'POST',
@@ -77,10 +72,6 @@ async function askClaude(userMessage) {
 }
 
 app.post('/webhook', async (req, res) => {
-  const signature = req.headers['x-line-signature'];
-  if (!verifySignature(req.rawBody, signature)) {
-    return res.status(401).send('Unauthorized');
-  }
   res.status(200).send('OK');
 
   const events = req.body.events || [];
